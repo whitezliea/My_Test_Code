@@ -1,3 +1,10 @@
+/*
+  Reference URL: 
+   https://www.cnblogs.com/Long-w/p/9604201.html
+   https://www.cnblogs.com/WindSun/p/11277106.html
+   https://docs.oracle.com/cd/E38902_01/html/E38880/sockets-18552.html
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

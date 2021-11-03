@@ -1,3 +1,9 @@
+/*
+    Reference URL: 
+    http://www.manongjc.com/detail/23-cdafymnuvpwnicp.html
+    https://www.cxyzjd.com/article/qq_38570571/79870763
+*/
+
 #include<iostream>
 #include<string>
 #include"MyDB.h"
