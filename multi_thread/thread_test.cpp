@@ -99,4 +99,3 @@ void* _thread_2(void* arg)
 	printf("leave thread2\n");
 	pthread_exit(0);
 }
-
