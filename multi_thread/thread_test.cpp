@@ -94,7 +94,7 @@ void* _thread_2(void* arg)
         pthread_cond_signal(&cond);
     }
 	g_Flag = 2;
-	printf("this is thread1, g_Flag: %d, thread id is %u\n",g_Flag, (unsigned int)pthread_self());
+	printf("this is thread2, g_Flag: %d, thread id is %u\n",g_Flag, (unsigned int)pthread_self());
     pthread_mutex_unlock(&mutex);
 	printf("leave thread2\n");
 	pthread_exit(0);
