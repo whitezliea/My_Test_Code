@@ -2,6 +2,8 @@ show DATABASES;
 
 CREATE DATABASE CloudPan;
 
+CREATE DATABASE FTP;
+
 USE CloudPan;
 DROP TABLE pan_user;
 CREATE TABLE IF NOT EXISTS `pan_user`(

@@ -36,7 +36,7 @@ public:
 	void SetDBName(const char* DBName);
 
 	sql::Connection*GetConnection();
-	void ReleaseConnection(sql::Connection * conn);
+	void releaseConnection_(sql::Connection * conn);
 
 private:
 
