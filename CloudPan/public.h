@@ -28,13 +28,14 @@
 #include <csignal>  //signal
 #include <cerrno>  //Record the last error code of the system , the result is an integer variable.
 
+
 using namespace std;
 
 //port definition
 #define Manager_Port 6666 //
 #define Transport_Port 6667 //
 #define Rest_Port  6668 //
-#define MemCache_Port 11451 //
+#define MemCache_Port 11211 //
 
 //Other Information
 #define SER_ADDR "127.0.0.1"

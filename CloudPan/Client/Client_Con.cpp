@@ -1,7 +1,7 @@
 //
 // Created by white on 11/1/21.
 //
-
+#include "md5.h"
 #include "Client_Con.h"
 Client_Con::Client_Con(int port, const char *addr) {
     m_Addr = addr;
@@ -9,8 +9,9 @@ Client_Con::Client_Con(int port, const char *addr) {
      * The value (returned by socket function) is a file descriptor.
      * Return -1  when error.
      */
-    if((sock= socket(PF_INET,SOCK_STREAM,0)) < 0)     //PF_INET : IPV4_PROTOCOL_FAMILY
+    if((sock= socket(PF_INET,SOCK_STREAM,0)) < 0){     //PF_INET : IPV4_PROTOCOL_FAMILY
         ERR_EXIT("socket");
+    }
     memset(&Ser_Addr,0,sizeof(Ser_Addr));
     Ser_Addr.sin_family = AF_INET;
     Ser_Addr.sin_port = htons(port);  //host byte--->network byte long
@@ -25,11 +26,11 @@ void Client_Con::Run() {
     {
         ERR_EXIT("connect");
     }
+    Cloud_Pan_Login();
     while(1)
     {
-        //Cloud_Pan_Login();
         do_Work();
-        break;
+        //break;
     }
 }
 
@@ -68,6 +69,7 @@ void Client_Con::sendMsg() {
                 strncmp("register success!",msg.c_str(),10)==0)  //strncmp(v1,v2,1), if v1 == v2 , return 0
         {
             Cloud_Pan_Function();
+            do_Work();
         }
         else if(strncmp("The user existed",msg.c_str(),17)==0)
         {
@@ -81,7 +83,7 @@ void Client_Con::sendMsg() {
             do_Work();
         }
         //while(1){}  --- ?
-        break;
+        //break;
     }
 }
 
@@ -91,7 +93,7 @@ void Client_Con::getInfo() {
     cin>>user;
     msg +=user;
     cout<<"password: ";
-    msg = msg+" "+passwd;
+    msg = msg + " " +MD5(passwd).toString();
     cout<<"send msg="<<msg<<endl;
     sendMsg();
 }
@@ -99,7 +101,7 @@ void Client_Con::getInfo() {
 void Client_Con::do_Work() {
     int select=0;
     system("clear");
-    Cloud_Pan_Login();
+    //Cloud_Pan_Login();
     cin>>select;
 
     switch (select) {

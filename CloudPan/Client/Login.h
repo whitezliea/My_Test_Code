@@ -55,7 +55,7 @@ void do_work()
             msg.push_back("ENTER");
             msg.push_back(user_name);
             msg.push_back(passwd);
-            send();
+            //send();
             break;
 
         case REGISTER:
@@ -66,7 +66,7 @@ void do_work()
             msg.push_back("REGISTER");
             msg.push_back(user_name);
             msg.push_back(passwd);
-            send();
+            //send();
             break;
 
         case UPLOAD:

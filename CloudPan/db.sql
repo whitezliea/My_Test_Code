@@ -30,3 +30,15 @@ user_file_id = "readme.txt" WHERE user_id = 1;
 
 
 # gcc -o db_test MyDB.cpp -L/usr/lib/mysql -lmysqlclient -lstdc++
+
+#//" user_name file_name file_MD5 file_path file_size file_chunk_size  trans_status"
+CREATE TABLE IF NOT EXISTS `pan_files`(
+    `id` INT UNSIGNED AUTO_INCREMENT,
+    `user_name` VARCHAR(100) NOT NULL,
+    `file_name` VARCHAR(100) NOT NULL,
+    `file_md5` VARCHAR(100) NOT NULL,
+    `file_path` VARCHAR(100) NOT NULL,
+    `file_size` VARCHAR(100) NOT NULL,
+    `file_chunk_size` VARCHAR(100) NOT NULL,
+     PRIMARY KEY(`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
