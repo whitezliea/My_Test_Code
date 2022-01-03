@@ -1,1 +1,948 @@
 
+```
+/*
+poj 2488
+#include<iostream>
+#include<stdlib.h>
+#include<malloc.h>
+using namespace std;
+int p=0,q=0;
+char b[100]={'a'};
+bool flag = false;
+bool visited[10][10]={false};
+int dir[8][2]=
+{   //x,y
+    {-1,-2},
+    {-2,-1},
+    {-2,1},
+    {-1,2},
+    {1,-2},
+    {2,-1},
+    {1,2},
+    {2,1}
+};
+bool in(int x,int y)
+{
+    if (x<1||y<1||x>p||y>q)
+        return false;
+    return true;
+}
+void dfs(int x,int y,int step)
+{
+    //结束条件
+    if (step == p*q)
+    {
+        cout<<"A1";
+        for (int i=2;i<2*step;i++)
+            cout<<b[i];
+        cout<<endl<<endl;
+        flag= true;
+        return ;
+    }
+    for (int i=0;i<8 && flag==false;i++)
+    {
+        int nx = x+dir[i][0];
+        int ny = y+dir[i][1];
+        if(in(nx,ny)&&visited[nx][ny]==false)
+        {
+            visited[nx][ny] = true;
+            b[2*step]='A'+ny-1;
+            b[2*step+1] = '1'+nx-1;
+            dfs(nx,ny,step+1);
+            visited[nx][ny] =false;
+        }
+            
+
+    }
+}
+
+int main()
+{
+    int t=0,nums=0;
+    cin>>t;
+    while(t--)
+    {
+        cin>>p>>q;
+        cout<<"Scenario #"<<++nums<<":"<<endl;
+        for (int i=0;i<10;i++)
+            for(int j=0;j<10;j++)
+                visited[i][j] = false;
+        flag=false;
+        visited[1][1]= true;
+        dfs(1,1,1);
+        if (flag==false)
+            cout<<"impossible"<<endl<<endl;
+    }
+    return 0;
+}
+*/
+```
+
+```
+poj 3083
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+int height=0,width=0;
+int nums=0,lr=0,step;
+char maze[50][50]={'.'};
+bool visited[50][50]={false};
+int sx=0,sy=0,ex=0,ey=0;
+/*
+ y------>y
+x
+|
+|
+x
+*/
+int dirl[4][2]= //左转优先
+{
+    {0,-1}, //左
+    {-1,0}, //上
+    {0,1},  //右
+    {1,0}   //下
+};
+int dirr[4][2]= //右转优先
+{
+    {0,1}, //右
+    {1,0}, //下
+    {0,-1},  //左
+    {-1,0}   //上
+};
+bool flag = false;
+class Queue
+{
+private:
+    /* data */
+public:
+    Queue();
+    ~Queue();
+};
+
+
+
+
+void DFS(int x,int y,int step,int dir[][2])
+{
+    //cout<<"test2"<<endl;
+    if (x==ex&&y==ey)
+    {
+        cout<<step<<" ";
+        flag=false;
+        return ;
+    }
+    //cout<<flag<<endl;
+    if (flag)
+        for (int i=0;i<4;i++)
+        {
+            int nx=x+dir[i][0];
+            int ny=y+dir[i][1];
+            if (nx<0||ny<0||nx>=height||ny>=width)
+            {
+                //cout<<nx<<" "<<ny<<endl;
+                continue;
+            }
+            if (visited[nx][ny]==false&&maze[nx][ny]!='#')
+            {
+                //cout<<"test3"<<endl;
+                //visited[nx][ny]=true;
+                DFS(nx,ny,step+1,dir);
+                //visited[nx][ny]=false;
+            }
+        }
+}
+
+void BFS()
+{
+
+}
+int main()
+{
+    int cases=0,i=0;
+    
+   
+    cin>>cases;
+    while (cases--)
+    {
+        cin>>height>>width;
+        for (int i=0;i<height;i++)
+            for(int j=0;j<width;j++)
+                {
+                    cin>>maze[i][j];
+                    if (maze[i][j]=='S')
+                    {
+                        sx=i;
+                        sy=j;
+                    }
+                    if (maze[i][j]=='E')
+                    {
+                        ex=i;
+                        ey=j;
+                    }
+                }
+            visited[sx][sy] = true;
+            //左转优先遍历
+            cout<<"test"<<endl;
+            flag = true;
+            DFS(sx,sy,1,dirl);
+            //右转遍历优先
+            flag=true;
+            for (i=0;i<50;i++)
+                for(int j=0;j<50;j++)
+                    visited[i][j]=false;
+            DFS(sx,sy,1,dirr);
+
+            //BFS查找最短路径
+            BFS();
+    }
+
+    return 0;
+}
+```
+
+```
+poj 3126
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+#define MAX  10000
+#define MAXSIZE 1000
+int nums[MAX]={0};
+bool visited[MAX] = {false};
+int k=0;
+int init_num=0,final_num=0;
+int dir[10] = {9,0,1,2,3,4,5,6,7,8}; 
+struct Node
+{
+    int s[4]={0};
+    int step=0;
+};
+
+class Queue
+{
+private:
+    struct Node data[MAXSIZE];
+    int rear;
+    int front;
+    int size;
+public:
+    Queue()
+    {
+        rear = -1;
+        front = -1;
+        size = 0;
+    }
+    void add(Node n)
+    {
+        if (isFull())
+            exit(-1);
+        rear ++;
+        rear %= MAXSIZE;
+        size++;
+        data[rear] = n ;
+    }
+    Node del()
+    {
+        if (isEmpty())
+            exit(-1);
+        front ++ ;
+        front %= MAXSIZE;
+        size--;
+        return data[front];
+    }
+    bool isEmpty()
+    {
+        return size  == 0;
+    }
+    bool isFull()
+    {
+        return  size == MAXSIZE;
+    }
+    Node getFront()
+    {
+        int index = front+1;
+        return data[index];
+    }
+    int getSize()
+    {
+        return size;
+    }
+   
+};
+
+
+bool function(int n)
+{
+    for (int i=2;i<=n-1;i++)
+    {
+        if (n%i==0)
+            return true;
+    }
+    return false;
+}
+
+void sushu()
+{
+    for (int i=1000;i<=MAX;i++)
+    {
+        if (!function(i))
+        {
+            nums[k++]=i;
+            //cout<<i<<" ";
+        }
+    }
+
+    //cout<<k<<endl;
+    // for (int i=0;i<=k-1;i++)
+    // {
+    //     cout<<nums[i]<<" ";
+    // }
+}
+
+bool isIn(int n)
+{
+    for (int i=0;i<k-1;i++)
+    {
+        if (n==nums[i])
+            return true;
+    }
+    return false;
+}
+
+void int_to_array(int n,int a[])
+{
+    
+    for (int i=0,j=1;i<4;i++ )
+    {
+        a[3-i] = (n/j) % 10;
+        j*=10;
+    }
+
+}
+
+int  array_to_int(int a[])
+{
+    int n=0;
+    for (int i=0,j=1;i<4;i++)
+    {
+        n = a[3-i] * j + n;
+        j*=10;
+    }
+    return n;
+}
+
+void BFS(int num)
+{
+    //cout<<"BFS1"<<endl;
+    Queue q;
+    Node n1;
+    int_to_array(num,n1.s);
+    n1.step=0;
+    visited[num] = true;
+    q.add(n1);
+    //cout<<"BFS2"<<endl;
+    while (!q.isEmpty())
+    {
+        //cout<<"BFS3"<<endl;
+        Node temp = q.getFront();
+        q.del();
+        if (array_to_int(temp.s)==final_num)
+        {
+            cout<<temp.step<<endl;
+            return ;
+        }
+        //int minindex[4]={0};
+        for (int i=0;i<=3;i++) //找最小值 0 1 2 3  1033 minindex=11
+        {
+            for (int j=0;j<10;j++)
+            {
+                Node son = temp;
+                //cout<<"BFS4"<<endl;
+                son.s[i] = (temp.s[i]+dir[j])%10;
+                int a = array_to_int(son.s);
+                if (a>=1000&&visited[a]==false&&isIn(a))
+                {
+                    
+                    visited[a]=true;
+                    //Node son = temp;1
+                    son.step  = temp.step+1;
+                    if (a==final_num)
+                    {
+                        cout<<son.step<<endl;
+                        return ;
+                    }
+                    //cout<<"BFS4"<<endl;
+                    //cout<<a<<" "<<son.step<<" "<<q.getSize()<<endl;
+                    q.add(son);
+                }
+            }
+            
+        }
+       
+    }
+    return ;
+}
+
+int main()
+{
+    int t=0;
+    cin>>t;
+    sushu();
+    while (t--)
+    {
+        for (int i=0;i<MAX;i++)
+            visited[i] = false;
+        init_num=0,final_num=0;
+        cin>>init_num>>final_num; 
+        BFS(init_num);
+    }
+
+    return 0;
+}
+
+/*
+Sample Input
+3
+1033 8179
+1373 8017
+1033 1033
+
+Sample Output
+6
+7
+0
+*/
+```
+
+```
+poj1426
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+int nums=0;
+#define MAXSIZE 200
+int s[100]={1};
+long long int maxnums = 0;
+int n=0;
+
+struct Node
+{
+    int s1[50]={0};
+    int step=0;
+};
+
+
+class Queue
+{
+private:
+    struct Node data[MAXSIZE];
+    int rear;
+    int front;
+    int size;
+public:
+    Queue()
+    {
+        rear = -1;
+        front = -1;
+        size = 0;
+    }
+    void add(Node n)
+    {
+        if (isFull())
+            exit(-1);
+        rear ++;
+        rear %= MAXSIZE;
+        size++;
+        data[rear] = n ;
+    }
+    Node del()
+    {
+        if (isEmpty())
+            exit(-1);
+        front ++ ;
+        front %= MAXSIZE;
+        size--;
+        return data[front];
+    }
+    bool isEmpty()
+    {
+        return size  == 0;
+    }
+    bool isFull()
+    {
+        return  size == MAXSIZE;
+    }
+    Node getFront()
+    {
+        int index = front+1;
+        return data[index];
+    }
+    int getSize()
+    {
+        return size;
+    }
+   
+};
+
+long long int math_s(int n) 
+{
+    long long int ten=2;
+    if (n==0)
+    {
+        return 1; 
+    }
+    else
+    {
+    for (int i=1;i<=n-1;i++)
+        ten = 2 * ten;
+    }
+    return ten;
+}
+
+bool isOK(Node n)
+{
+    int max = 0;
+    for (int i=n.step;i>=1;i--)
+    {
+        max += math_s(n.step-i)*n.s1[i] ;
+    }
+    if (max%nums == 0 && n.step >= nums)
+    {
+        maxnums = max;
+        return true;
+    }
+
+    return false;
+}
+
+void show(Node t)
+{
+    for (int i=1;i<=t.step;i++)
+        cout<<t.s1[i]<<" ";
+    cout<<t.step;
+    
+}
+
+
+void BFS()
+{
+    Queue q;
+    Node n1;
+    n1.step=1;
+    n1.s1[1]=1;
+    q.add(n1);
+    while (!q.isEmpty())
+    {
+        Node temp = q.getFront();
+        q.del();
+        show(temp);
+        cout<<" size:"<<q.getSize()<<endl;
+        if (temp.step >= 1)
+        {
+            if (isOK(temp))
+            {
+                cout<<"answer: "<<maxnums<<endl;
+                return ;
+            }
+        }
+
+        Node n=temp;
+        n.step=temp.step+1;
+        int k = n.step;
+        n.s1[k] = 1;
+        q.add(n);
+
+        n.s1[k] = 0;
+        q.add(n);
+        
+    }
+    
+    return ;
+}
+
+int main()
+{
+    while (1)
+    {
+        nums = 0 ;
+        cin>>nums;
+        if (nums == 0)
+            break;
+        BFS();
+    }
+    return 0;
+}
+
+/*
+Sample Input
+
+2
+6
+19
+0
+Sample Output
+
+10
+100100100100100100
+111111111111111111
+*/
+```
+
+```
+poj3278_BFS
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+int nums=0;
+#define MAXSIZE 200
+int s[100]={1};
+long long int maxnums = 0;
+int n=0;
+
+struct Node
+{
+    int s1[50]={0};
+    int step=0;
+};
+
+
+class Queue
+{
+private:
+    struct Node data[MAXSIZE];
+    int rear;
+    int front;
+    int size;
+public:
+    Queue()
+    {
+        rear = -1;
+        front = -1;
+        size = 0;
+    }
+    void add(Node n)
+    {
+        if (isFull())
+            exit(-1);
+        rear ++;
+        rear %= MAXSIZE;
+        size++;
+        data[rear] = n ;
+    }
+    Node del()
+    {
+        if (isEmpty())
+            exit(-1);
+        front ++ ;
+        front %= MAXSIZE;
+        size--;
+        return data[front];
+    }
+    bool isEmpty()
+    {
+        return size  == 0;
+    }
+    bool isFull()
+    {
+        return  size == MAXSIZE;
+    }
+    Node getFront()
+    {
+        int index = front+1;
+        return data[index];
+    }
+    int getSize()
+    {
+        return size;
+    }
+   
+};
+
+long long int math_s(int n) 
+{
+    long long int ten=2;
+    if (n==0)
+    {
+        return 1; 
+    }
+    else
+    {
+    for (int i=1;i<=n-1;i++)
+        ten = 2 * ten;
+    }
+    return ten;
+}
+
+bool isOK(Node n)
+{
+    int max = 0;
+    for (int i=n.step;i>=1;i--)
+    {
+        max += math_s(n.step-i)*n.s1[i] ;
+    }
+    if (max%nums == 0 && n.step >= nums)
+    {
+        maxnums = max;
+        return true;
+    }
+
+    return false;
+}
+
+void show(Node t)
+{
+    for (int i=1;i<=t.step;i++)
+        cout<<t.s1[i]<<" ";
+    cout<<t.step;
+    
+}
+
+
+void BFS()
+{
+    Queue q;
+    Node n1;
+    n1.step=1;
+    n1.s1[1]=1;
+    q.add(n1);
+    while (!q.isEmpty())
+    {
+        Node temp = q.getFront();
+        q.del();
+        show(temp);
+        cout<<" size:"<<q.getSize()<<endl;
+        if (temp.step >= 1)
+        {
+            if (isOK(temp))
+            {
+                cout<<"answer: "<<maxnums<<endl;
+                return ;
+            }
+        }
+
+        Node n=temp;
+        n.step=temp.step+1;
+        int k = n.step;
+        n.s1[k] = 1;
+        q.add(n);
+
+        n.s1[k] = 0;
+        q.add(n);
+        
+    }
+    
+    return ;
+}
+
+int main()
+{
+    while (1)
+    {
+        nums = 0 ;
+        cin>>nums;
+        if (nums == 0)
+            break;
+        BFS();
+    }
+    return 0;
+}
+
+/*
+Sample Input
+
+2
+6
+19
+0
+Sample Output
+
+10
+100100100100100100
+111111111111111111
+*/
+
+```
+```
+poj3278_BFS
+/*
+题意：就是给出a和b点的横坐标，求到a，b的最小行动次数，
+每次可以向左或向右移动一步，即横坐标加1或者减1，也可以横坐标变成原来的两倍。
+*/
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+int a=0,b=0;
+bool visited[10000] = {false};
+#define MAXSIZE 200
+struct Node
+{
+    int nums=0;
+    int step=0;
+};
+
+class Queue
+{
+private:
+    struct Node data[MAXSIZE];
+    int rear;
+    int front;
+    int size;
+public:
+    Queue()
+    {
+        rear = -1;
+        front = -1;
+        size = 0;
+    }
+    void add(Node n)
+    {
+        if (isFull())
+            exit(-1);
+        rear ++;
+        rear %= MAXSIZE;
+        size++;
+        data[rear] = n ;
+    }
+    Node del()
+    {
+        if (isEmpty())
+            exit(-1);
+        front ++ ;
+        front %= MAXSIZE;
+        size--;
+        return data[front];
+    }
+    bool isEmpty()
+    {
+        return size  == 0;
+    }
+    bool isFull()
+    {
+        return  size == MAXSIZE;
+    }
+    Node getFront()
+    {
+        int index = front+1;
+        return data[index];
+    }
+    int getSize()
+    {
+        return size;
+    }
+   
+};
+
+
+void BFS(Node n)
+{
+    Queue q;
+    n.step=0;
+    q.add(n);
+    while (!q.isEmpty())
+    {
+        Node temp = q.getFront();
+        cout<<temp.nums<<" "<<q.getSize()<<" "<<temp.step<<endl;
+        q.del();
+        
+        //结束条件
+        if (temp.nums == b)
+        {
+            cout<<temp.step<<endl;
+            return ;
+        }
+        if (temp.nums>=0&&temp.nums<=b&&visited[temp.nums]==false)
+        {
+        
+        Node n2;
+        visited[temp.nums]=true;
+        n2.step = temp.step+1;
+        //向左走一步
+        n2.nums = temp.nums-1;
+        q.add(n2);
+
+        //向右走一步
+        n2.nums=temp.nums+1;
+        q.add(n2);
+
+        
+        //两倍路数
+        n2.nums = temp.nums * 2;
+        q.add(n2);
+        }
+    }
+    return; 
+}
+
+int main()
+{
+    cin>>a>>b;
+    Node n1;
+    n1.nums = a;
+    BFS(n1);
+    return 0;
+}
+```
+
+```
+poj3278_DFS
+/*
+题意：就是给出a和b点的横坐标，求到a，b的最小行动次数，
+每次可以向左或向右移动一步，即横坐标加1或者减1，也可以横坐标变成原来的两倍。
+*/
+
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+#define MAXSIZE 10000
+int minstep=9999;
+int a=0,b=0;
+//a--->b
+bool visited[MAXSIZE] = {false};
+
+void DFS(int cnt,int step)
+{
+    if (cnt<0||cnt>b)
+        return;
+    //cout<<cnt<<" "<<step<<endl;
+    if (cnt == b)
+    {
+        if (minstep > step)
+            minstep = step;
+        return ;
+    }
+
+    if (visited[cnt] == false)
+    {
+        //向右走一步
+        visited[cnt] = true;
+        cnt = cnt +1;
+        DFS(cnt,step+1);
+        cnt = cnt - 1;
+        visited[cnt] = false;
+
+        //向左走一步
+        visited[cnt] = true;
+        cnt = cnt -1;
+        DFS(cnt,step+1);
+        cnt = cnt + 1;
+        visited[cnt] = false;
+        
+        //两倍
+        visited[cnt] = true;
+        cnt = cnt *2;
+        DFS(cnt,step+1);
+        cnt = cnt /2;
+        visited[cnt] = false;
+    }
+    
+    return ;
+}
+
+int main()
+{
+    cin>>a>>b;
+    DFS(a,0);
+    cout<<minstep<<endl;
+    return ;
+}
+```
